@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绘制个性样表</title>
+
+    <script src="../js/echarts.min.js"></script>
+</head>
+
+<body>
+
+    <div id="main" style="width: 600px; height:400px;"></div>
+    <script>
+        var mychart = echarts.init(document.getElementById("main"));
+        option = {
+            // 设置全局的背景颜色
+            backgroundColor: '#ccc',
+            // 设置全局的文本样式
+            textStyle: {
+                color: 'rgba(255, 255, 255, 0.5)'
+            },
+            visualMap: {
+                // 不显示visualMap组件，只显示明亮的变化
+                show: false,
+                // 设置最小值
+                min: 80,
+                // 设置最大值
+                max: 600,
+                // 设置明暗程度的变化
+                inRange: {
+                    // 明亮变化的程度是从0到1
+                    colorLightness: [0, 1],
+                }
+            },
+            title: {
+                text: "南丁格尔图"
+            },
+            series: [{
+                type: "pie",
+                name: "访问来源",
+                radius: '55%',
+                data: [
+                    { value: 235, name: "广告" },
+                    { value: 300, name: "视频" },
+                    { value: 400, name: "游戏" },
+                    { value: 250, name: "电视" }
+                ],
+                roseType: 'angle',
+                itemStyle: {
+                    // 设置扇形颜色
+                    color: '#c23531',
+                    // 阴影的大小
+                    shadowBlur: 100,
+                    // 阴影水平方向上的偏移
+                    shadowOffsetX: 0,
+                    // 阴影垂直方向上的偏移
+                    shadowOffsetY: 0,
+                    // 阴影颜色
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                },
+                // 单独设置series中的标签文本
+                label: {
+                    textStyle: {
+                        color: 'rgba(255, 0, 0, 0.7)'
+                    }
+                },
+                // 饼状图的视觉引导线
+                labelLine: {
+                    lineStyle: {
+                        color: 'rgba(0, 255, 0, 0.5)'
+                    }
+                },
+                // 颜色
+                color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [{
+                        offset: 0, color: 'white' // 0% 处的颜色
+                    }, {
+                        offset: 1, color: 'black' // 100% 处的颜色
+                    }],
+                    global: false // 缺省为 false
+                },
+
+            }],
+        }
+
+        mychart.setOption(option);
+    </script>
+</body>
+
+
+
+</html>
