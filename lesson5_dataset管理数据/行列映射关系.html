@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>行列映射关系</title>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/echarts.min.js"></script>
+</head>
+
+<body>
+
+    <div id="main" style="height:800px; width:600px;"></div>
+    <script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        var option = {
+            legend: {},
+            tooltip: {},
+            dataset: {
+                source: [
+                    ['product', '2012', '2013', '2014', '2015'],
+                    ['Matcha Latte', 41.1, 30.4, 65.1, 53.3],
+                    ['Milk Tea', 86.5, 92.1, 85.7, 83.1],
+                    ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4]
+                ]
+            },
+            // 设置两个区域
+            xAxis:[
+                {type:'category', gridIndex:0},
+                {type:'category', gridIndex:1},
+            ],
+            yAxis:[
+                {gridIndex:0},
+                {gridIndex:1},
+            ],
+            // 设置栅格
+            grid:[
+                {bottom: '55%'},
+                {top: '55%'},
+                
+            ],
+            // 设置样式
+            series:[
+                // 这几个样式设置为行，每个系列对应着dataset的每一行
+                {type:'bar', seriesLayoutBy:'row'},
+                {type:'bar', seriesLayoutBy:'row'},
+                {type:'bar', seriesLayoutBy:'row'},
+
+                // 这几个样式对应着dataset的每一列，将会在第二个直角坐标中显示
+                {type:'bar', xAxisIndex:1, yAxisIndex:1},
+                {type:'bar', xAxisIndex:1, yAxisIndex:1},
+                {type:'bar', xAxisIndex:1, yAxisIndex:1},
+                {type:'bar', xAxisIndex:1, yAxisIndex:1},
+
+            ]
+        }
+
+        mychart.setOption(option);
+
+    </script>
+</body>
+
+</html>

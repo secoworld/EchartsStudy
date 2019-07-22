@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动态加载数据</title>
+
+    <!-- jquery 和 echarts -->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/echarts.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:400px; width: 600px;"></div>
+    <div id="show"></div>
+    <script>
+        var base = +new Date(2000, 1, 1);
+        var oneDay = 24 * 3600 * 1000;
+        var date = [];
+        var data = [];
+        base = new Date(base);
+        var dataNum =0;
+
+        // 初始化muchart
+        mychart = echarts.init(document.getElementById("main"));
+
+
+        function createData(shift) {
+            base = [base.getFullYear(), base.getMonth() + 1, base.getDate()].join('/');
+            date.push(base);
+            console.log(base);
+
+            data.push((Math.random() * 100));
+
+            // 是否将最前的数据删除
+            if(shift){
+                date.shift();
+                data.shift();
+            }else{
+                dataNum++;
+            }
+            base = new Date(+new Date(base) + oneDay);
+
+            
+        }
+
+        // 首先创建一百个数据
+        for (var i = 0; i < 100; i++) {
+            createData();
+        }
+
+        // 设置选项
+        option = {
+            // 标题
+            title: {
+                text: "异步数据加载"
+            },
+            tooltip: {},
+            legend: {
+                data: ['销量']
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            // 系列 列表
+            series: [{
+                type: "line",
+                smooth: true,
+                // 折现下面充满颜色
+                areaStyle:{
+                    normal:{}
+                },
+                name: "销量",
+                data: [],
+            }],
+        }
+
+        // 首先第一次加载数据
+        mychart.setOption(option);
+
+        // 定时执行
+        setInterval(function () {
+            // 创建新的数据
+            createData();
+            mychart.setOption({
+                xAxis:{
+                    data: date
+                },
+                series: [{
+                    name:"销售额",
+                    data:data
+                }]
+            })
+
+            $("#show").text("已经加载数据: "+ dataNum +"  项");
+        }, 1000);
+
+    </script>
+
+</body>
+
+</html>
