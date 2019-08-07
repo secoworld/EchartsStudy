@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>天气统计</title>
+
+    <script src="../../js/echarts.min.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 600px; margin: auto"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        // 设置天气的图标
+        var weatherIcons = {
+            'Sunny': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565007953694&di=457f7d1db89c620f27cdc45178e9b5d2&imgtype=0&src=http%3A%2F%2Fimg2.3png.com%2F5d01e41980b94243701e17ba513c3bfa3522.png',
+            'Cloudy': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565007919003&di=885a16e7e9474c03e76804ba7e07c653&imgtype=0&src=http%3A%2F%2Fku.90sjimg.com%2Felement_pic%2F01%2F33%2F23%2F05573b81239851f.jpg',
+            'Showers': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565008007802&di=3a7c796d5378107e45b81150893c8565&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fdesign%2F01%2F30%2F83%2F23%2F590339f82c534.png'
+        };
+
+        //设置柱体显示的字体
+        var serialLabel = {
+            normal: {
+                show: true,
+                textBorderColor: '#333',
+                textBorderWidth: 2
+            }
+        }
+
+        var option = {
+            title: {
+                text: 'weather Statics'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+            },
+            legend: {
+                data: ['City Alpha', 'City Beta', 'City Gamma']
+            },
+            grid: {
+                left: 100
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            // 设置x轴
+            xAxis: {
+                type: 'value',
+                name: 'Days',
+                // 显示的坐标轴标签
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            yAxis: {
+                type: 'category',
+                inverse: true,
+                data: ['Sunny', 'Cloudy', 'Showers'],
+                // 显示的坐标轴的标签
+                axisLabel: {
+                    formatter: function (value) {
+                        return '{' + value + '|}\n {value|' + value + '}';
+                    },
+                    margin: 20,
+                    // 富文本样式
+                    rich: {
+                        value: {
+                            lineHeight: 30,
+                            align: 'center',
+                        },
+                        Sunny: {
+                            height: 80,
+                            align: 'center',
+                            backgroundColor: {
+                                image: weatherIcons.Sunny
+                            }
+                        },
+                        Cloudy: {
+                            height: 80,
+                            align: 'center',
+                            backgroundColor: {
+                                image: weatherIcons.Cloudy
+                            }
+                        },
+                        Showers: {
+                            height: 80,
+                            align: 'center',
+                            backgroundColor: {
+                                image: weatherIcons.Showers
+                            }
+                        },
+
+                    }
+                }
+            },
+            series:[{
+                name: 'City Alpha',
+                type: 'bar',
+                data: [165, 170, 20],
+                label: serialLabel,
+                markPoint:{
+                    symbolSize: 1,
+                    // 偏移， 使自己向上偏移一半
+                    symbolOffset: [0, '50%'],
+                    label:{
+                        normal:{
+                            formatter: '{a|{a}\n}{b|{b} } {c|{c}}',
+                            backgroundColor: 'rgba(242, 242, 242, 1)',
+                            borderColor: '#aaa',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            padding: [4, 10],
+                            position: 'right',
+                            // 距离图形元素的位置， 当position为‘right’等时有效
+                            distance: 20,
+
+                            // 设置富文本的样式
+                            rich:{
+                                a:{
+                                    align: 'center',
+                                    color: '#fff',
+                                    fontSize:18,
+                                    textShadowBlur: 2,
+                                    textShadowColor: '#000',
+                                    textShadowOffsetX: 0,
+                                    textShadowOffsetY: 1,
+                                    textBorderColor:'#333',
+                                    textBorderWidth: 3
+                                },
+                                b:{
+                                    color: '#333',
+
+                                },
+                                c:{
+                                    color: 'ff8811',
+                                    textBorderColor: '#000',
+                                    textBorderWidth: 1,
+                                    fontSize: 22
+                                }
+                            }
+                        }
+                    },
+                        data:[
+                            {type: 'max', name: 'max days: '},
+                            {type: 'min', name: 'min days: '}
+                        ]
+                }
+            },{
+                name: 'City Beta',
+                type: 'bar',
+                label: serialLabel,
+                data: [150, 105, 110]    
+                },
+            {
+                name: 'City Gamma',
+                type: 'bar',
+                label: serialLabel,
+                data: [220, 82, 63]
+            }
+            ]
+        };
+
+        mychart.setOption(option);
+
+
+
+    </Script>
+
+</body>

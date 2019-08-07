@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悬空效果</title>
+
+    <script src="../../js/echarts.min.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 600px; margin: auto"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        
+        var option = {
+            color: ['#3398db'],
+            tooltip:{
+                trigger: 'axis',
+                axisPointer:{
+                    type: 'shadow'
+                },
+                formatter: function(params){
+                    var tar=params[1];
+                    return tar.name + '<br>' + tar.seriesName + ':'+ tar.value;
+                }
+            },
+
+            xAxis:{
+                type: 'category',
+                data:  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisTick :{
+                    // 在broundaryGap 为true的时候有效，保证刻度线与标签对齐
+                    alignWidthLabel: true,
+                },
+            },
+            yAxis:{
+                type: 'value'
+            },
+            series: [{
+                name: '辅助',
+                type: 'bar',
+                barWidth: '60%',
+                stack: 'a',
+                itemStyle:{
+                    normal:{
+                        color:'rgba(0,0,0,0)'
+                    }
+                },
+                data:[10, 52, 200, 334, 390, 330, 220]
+            },
+            {
+                name: '消耗的费用',
+                type: 'bar',
+                barWidth: '60%',
+                stack: 'a',
+                data:[10, 52, 200, 334, 390, 330, 220]
+            }
+        ]
+        }
+     
+        mychart.setOption(option);
+
+
+
+    </Script>
+
+</body>

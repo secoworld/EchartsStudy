@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>散点图</title>
+
+    <script src="../../js/echarts.min.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 800px; margin: auto"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        var image = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565054063519&di=324b9ad12de0d5028436136b5efebb23&imgtype=0&src=http%3A%2F%2Fimg1.juimg.com%2F170712%2F330706-1FG212112092.jpg'
+        // 设置图片
+        var pieimage = new Image();
+        pieimage.src = image;
+
+        var option = {
+            xAxis: {},
+            yAxis: {},
+            series: [
+                {
+                    symbolSize: 20,
+                    data: [
+                        [10.0, 8.04],
+                        [8.0, 6.95],
+                        [13.0, 7.58],
+                        [9.0, 8.81],
+                        [11.0, 8.33],
+                        [14.0, 9.96],
+                        [6.0, 7.24],
+                        [4.0, 4.26],
+                        [12.0, 10.84],
+                        [7.0, 4.82],
+                        [5.0, 5.68]
+                    ],
+                    type: 'scatter'
+                }
+            ]
+        }
+
+        mychart.setOption(option);
+
+
+
+    </Script>
+
+</body>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悬空效果</title>
+
+    <script src="../../js/echarts.min.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 600px; margin: auto"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        var option={
+            title:{
+                text: '动态数据',
+                subtext: '纯属虚构',
+            },
+            tooltip: {
+                trigger:'axis',
+                axisPointer:{
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#444',
+                    }
+                }
+            },
+            legend:{
+                data: ['最新成交价', '预购队列']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {readOnly: false},
+                    restore: {},
+                    saveAsImage:{}
+                }
+            },
+            dataZoom: [
+                {
+                    show: true,
+                    start: 0,
+                    end: 100
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: true,
+                    data: (function(){
+                        var now= new Date();
+                        var res=[];
+                        var len=10;
+                        while(len--){
+                            res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+                            now = new Date(now-2000);
+                        }
+                        return res;
+                    })()
+                },{
+                    type: 'category',
+                    boundaryGap: true,
+                    data: (function(){
+                        var res=[];
+                        var len=10;
+                        while(len--){
+                            res.push(10-len-1);
+                        }
+                        return res;
+                    })()
+                }
+            ],
+            yAxis:[
+                {
+                    type: 'value',
+                    scale: true,
+                    name: '价格',
+                    max: 30,
+                    min: 0,
+                    boundaryGap: [0.2, 0.2]
+                },
+                {
+                    type: 'value',
+                    scale: true,
+                    name: '预销量',
+                    max: 1200,
+                    min: 0,
+                    boundaryGap: [0.2, 0.2]
+                }
+            ],
+            series:[
+                {
+                    name: '预购队列',
+                    type: 'bar',
+                    yAxisIndex:1,
+                    xAxisIndex: 1,
+                    data: (function(){
+                        var res=[];
+                        var len=10;
+                        while(len--){
+                            res.push(Math.round(Math.random()*1000));
+
+                        }
+                        return res;
+                    })()
+                },
+                {
+                    type: '最新成交价',
+                    type: 'line',
+                    data: (function(){
+                        var res=[];
+                        var len=10;
+                        while(len--){
+                            res.push((Math.random()*10+5).toFixed(1)-0);
+
+                        }
+                        return res;
+                    })()
+                }
+            ]
+        }
+
+        mychart.setOption(option);
+
+
+        // 动态更新数据
+        var count=11;
+
+        setInterval(function(){
+            var axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '');
+
+            var data0 = option.series[0].data;
+            var data1 = option.series[1].data;
+            data0.shift();
+            data0.push(Math.round(Math.random()*1000));
+            data1.shift();
+            data1.push((Math.random()*10+5).toFixed(1) -0);
+
+
+            option.xAxis[0].data.shift();
+            option.xAxis[0].data.push(axisData);
+            option.xAxis[1].data.shift();
+            option.xAxis[1].data.push(count++);
+
+            mychart.setOption(option);
+        }, 2000);
+
+
+    </Script>
+
+</body>

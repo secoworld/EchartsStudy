@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>基本饼图</title>
+
+    <script src="../../js/echarts.min.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 800px; margin: auto"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        var image = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565054063519&di=324b9ad12de0d5028436136b5efebb23&imgtype=0&src=http%3A%2F%2Fimg1.juimg.com%2F170712%2F330706-1FG212112092.jpg'
+        // 设置图片
+        var pieimage = new Image();
+        pieimage.src = image;
+
+        var itemStyle = {
+            normal: {
+                opacity: 0.7,
+                color: {
+                    image: pieimage,
+                    repeat: 'repeat'
+                },
+                borderWidth: 3,
+                borderColor: '#235894'
+            }
+        };
+
+        var option = {
+            title: {
+                text: '饼图纹理',
+                textStyle: {
+                    color: '#235894'
+                }
+            },
+            tooltip: {},
+            series: [
+                {
+                    name: 'pie',
+                    type: 'pie',
+                    selectedMode: 'single',
+                    selectedOffset: 30,
+                    Clockwise: true,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 18,
+                                color: '#235894'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            color: '#235894'
+                        }
+                    },
+                    data: [
+                        { value: 335, name: '直接访问' },
+                        { value: 310, name: '邮件营销' },
+                        { value: 234, name: '联盟广告' },
+                        { value: 135, name: '视频广告' },
+                        { value: 1548, name: '搜索引擎' }
+                    ],
+                    itemStyle: itemStyle
+                }
+            ]
+        }
+        mychart.setOption(option);
+
+
+
+
+    </Script>
+
+</body>
