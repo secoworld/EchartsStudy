@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script src="http://api.map.baidu.com/api?v=3.0&ak=DAmK0SagjeGIFAccny0BNkwR4LiIn9C1"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var mychart = echarts.init(dom);
+        var app = {};
+        option = null;
+
+
+        //  创建canvas
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext('2d');
+
+        var imgData;
+        var currentImg;
+
+        // 配置
+        var config={
+            // 放大比例
+            scale: 0.3,
+            // 粗糙程度
+            roughness: 0,
+            // 表示是金属材质还是非金属, 0表示非金属，1表示是金属
+            metalness: 1,
+            // 投影方式，perspective是透明方式， orthographic为正交投影
+            projection: 'orthographic',
+            // 景深效果
+            depthOfField: 4,
+            lockY: false,
+            move: true,
+            sameColor: false,
+            color: '#777',
+            colorContrast: 1.2,
+            // 光照强度
+            lightIntensity: 1,
+            // 
+            lightRotate: 30,
+            lightPicth: 40,
+            // 屏幕空间的环境光遮蔽效果
+            AO: 1.5,
+            // 显示环境
+            showEnvironment: false,
+
+            barNumber: 80,
+            barBebel: 0.18,
+            barSize: 1.2
+        }
+
+        option={
+            tooltip:{},
+            backgroundColor: '#000',
+            xAxis3D:{},
+            yAxis3D:{},
+            zAxis3D:{
+                min: 0,
+                max: 100
+            },
+            grid3D:{
+                show: false,
+                viewControl:{
+                    projection: 'perspective',
+                    alpha: 45,
+                    beta: -45,
+                    panSensitivity: config.move? 1:0,
+                    // 设置旋转的灵敏度，[1, 0]:只能横向, [0, 1]：只能纵向旋转
+                    rotateSensitivity: config.lockY ? [1,0]:1,
+                    // 进行鼠标旋转，缩放等操作的迟滞因子
+                    damping: 0.9,
+                    // 距离
+                    distance: 60
+                },
+                // 后处理特效的相关配置
+                postEffect:{
+                    enable: true,
+                    // 高光
+                    bloom:{
+                        intensity: 0.2
+                    },
+                    // 屏幕空间的环境光遮蔽效果
+                    screenSpaceAmbientOcclusion:{
+                        enable: true,
+                        intensity: 1.5,
+                        radius: 5,
+                        quality: 'high'
+                    },
+                    // 
+                    screenSpaceReflection:{
+                        enable: true,
+                    },
+                    // 景深效果
+                    depthOfField:{
+                        enable: true,
+                        // 焦外的模糊半径
+                        blurRadius: config.depthOfField,
+                        // 镜头的F值，值越小景深越浅
+                        fstop: 10,
+                        // 初始焦距
+                        focalDistance: 55
+                    },
+                    // 深度
+                    boxDepth: 100,
+                    // 高度
+                    boxHeight: 20,
+                    // 环境
+                    environment: 'none'
+                },
+                light:{
+                    main:{
+                        shadow: true,
+                        intensity: 2
+                    },
+                    //反射 
+                    ambientCubemap:{
+                        // 环境纹理的url
+                        texture: '../../data-gl/asset/pisa.hdr',
+                        // 画面的曝光
+                        exposure: 2,
+                        // 漫反射的强度
+                        diffuseIntensity: 0.2,
+                        // 高反光
+                        spacularIntensity: 1.5
+                    }
+                }
+            }
+        }
+
+        // 更新数据
+        function updateData(pixelData, width, height){
+            console.time("update");
+            var data = new Float32Array(pixelData.length / 4*3);
+            var off=0;
+            for(var i=0; i<pixelData; i++){
+                var r = pixelData[i*4];
+                var g = pixelData[i*4+1];
+                var b = pixelData[i*4+2];
+                
+                var lum = 0.2125 * r + 0.7154 * g + 0.0721 * b;
+                lum = (lum - 125) * config.scale + 50;
+                data[off++] = i % width;
+                data[off++] = height - Math.floor(i/width);
+                data[off++] = lum;
+            }
+
+            mychart.setOption({
+                grid3D:{
+                    boxWidth: 100 / height * width,
+                },
+                series:[{
+                    animation: false,
+                    type: 'bar2D',
+                    shading: 'realistic',
+                    realisticMaterial:{
+                        roughness: config.roughness,
+                        metalness: config.metalness
+                    },
+                    barSize: config.barSize,
+                    bevelSize: config.barBebel,
+                    slient: true,
+                    itemStyle:{
+                        color: config.sameColor ? config.color : function(params) {
+                    var i = params.dataIndex;
+                    var r = pixelData[i * 4] / 255;
+                    var g = pixelData[i * 4 + 1] / 255;
+                    var b = pixelData[i * 4 + 2] / 255;
+                    var lum = 0.2125 * r + 0.7154 * g + 0.0721 * b;
+                    r *= lum * config.colorContrast;
+                    g *= lum * config.colorContrast;
+                    b *= lum * config.colorContrast;
+                    return [r, g, b, 1];
+                    }
+                    },
+                    data: data
+                }]
+            });
+        }
+
+        function loadImage(img){
+            var height = (canvas.height = Math.min(config.barNumber, img.height));
+            var aspect = img.width/ img.height;
+            var width = (canvas.width = Math.round(height * aspect));
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            imgData = ctx.getImageData(0, 0, width, height);
+
+            updateData(imgData.data, width, height);
+        }
+
+        var img = new Image();
+        img.onload = function(){
+            loadImage(img);
+            currentImg = img;
+        }
+
+        img.src = '../../data-gl/asset/bitcoin.png'
+
+        mychart.setOption(option);
+
+    </script>
+</body>
+
+</html>

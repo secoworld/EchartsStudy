@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script src="http://api.map.baidu.com/api?v=3.0&ak=DAmK0SagjeGIFAccny0BNkwR4LiIn9C1"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var mychart = echarts.init(dom);
+        var app = {};
+        option = null;
+
+        var LENGTH=30;
+
+        function creatNodes(count) {
+            var node = [];
+            for (var i = 0; i < count; i++) {
+                node.push({
+                    name: i,
+                })
+            }
+            return node;
+        }
+
+        function creatLinks(count) {
+            var links = [];
+            if (count === 2) {
+                return links[{
+                    source: 0,
+                    target: 1,
+                    value: Math.round(Math.random() * 10)
+                }];
+            }
+            var j=0;
+            for (var i = 1; i < count ; i=2*i) {
+                var num=2*i;
+                if(count < 2*i){
+                    num=count;
+                }
+                for(var k=i; k<num; k++){
+                    links.push({
+                        source:Math.floor(k/2),
+                        target:k,
+                        value: Math.round(Math.random()*10)
+
+                    })
+                }
+                }
+            
+            return links;
+        }
+
+        option = {
+            title: {
+                text: '桑基图'
+            },
+            series: [
+                {
+                    type: 'sankey',
+                    focusNodeAdjacency: 'allEdges',
+                    layout:'none',
+                    data: creatNodes(LENGTH),
+                    links: creatLinks(LENGTH),
+                }
+
+            ]
+        }
+
+        mychart.setOption(option)
+    </script>
+</body>
+
+</html>

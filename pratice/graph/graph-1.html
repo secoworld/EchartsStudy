@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script src="http://api.map.baidu.com/api?v=3.0&ak=DAmK0SagjeGIFAccny0BNkwR4LiIn9C1"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var mychart = echarts.init(dom);
+        var app = {};
+        option = null;
+
+        // 设置初始数据
+        var data=[
+            {
+                fixed: true,
+                x: mychart.getWidth()/2,
+                y: mychart.getHeight()/2,
+                symbolSize: 20,
+                id:'-1'
+            }
+        ]
+
+        var edges=[]
+
+        // 设置选项
+        option={
+            series: [
+                {
+                    type: 'graph',
+                    layout: 'force',
+                    animation: false,
+                    data: data,
+                    // 力引导布局的相关配置
+                    force:{
+                        // 节点之间的斥力因子
+                        repulsion: 100,
+                        // 两个节点之间的距离
+                        edgeLength: 5
+
+                    }
+                }
+            ]
+        };
+
+        // 设置定时
+        setInterval(function(){
+            data.push({
+                id: data.length
+            });
+
+            var source = Math.round((data.length-1)* Math.random());
+            var end = Math.round((data.length-1)* Math.random());
+
+            if(source != end){
+                // 节点之间的关系
+                edges.push({
+                    source: source,
+                    target: end
+                });
+            }
+
+            mychart.setOption({
+                series:[
+                    {
+                        roam: true,
+                        data: data,
+                        edges: edges
+                    }
+                ]
+            })
+        },500)
+
+        mychart.setOption(option)
+    </script>
+</body>
+
+</html>

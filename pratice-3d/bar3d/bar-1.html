@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script src="http://api.map.baidu.com/api?v=3.0&ak=DAmK0SagjeGIFAccny0BNkwR4LiIn9C1"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var mychart = echarts.init(dom);
+        var app = {};
+        option = null;
+       
+       function creatData(count){
+           var data=[];
+           for(var i=0; i<count; i++){
+              for(var j=0; j<count; j++){
+                  data.push([
+                      i,j,Math.round(Math.random()*100)
+                  ])
+              }
+           }
+
+           return data;
+       }
+
+       option={
+           grid3D:{},
+           tooltip:{},
+           xAxis3D:{},
+           yAxis3D:{},
+           zAxis3D:{},
+           visualMap:{
+               max: 100,
+           },
+           series:[
+               {
+                   type: 'bar3D',
+                   shading: 'lambert',
+                   data:creatData(100)
+               }
+           ]
+       }
+
+       mychart.setOption(option);
+
+    </script>
+</body>
+
+</html>
