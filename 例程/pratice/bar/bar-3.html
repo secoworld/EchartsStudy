@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>条形码旋转图</title>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 600px; margin: auto"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        function generateDate(count){
+            var baseValue = Math.random()*1000;
+            var time = +new Date(2011, 0, 1);
+            var smallBaseValue;
+
+            function next(dix){
+                smallBaseValue = dix % 30 ===0 ? Math.random()*700 : (smallBaseValue + Math.random()*500 -250);
+                baseValue += Math.random()*20 -10;
+                return Math.max(0, Math.round(baseValue+smallBaseValue)+3000);
+            }
+
+            var categorData = [];
+            var valueData =[];
+             
+            for(var i=0; i<count; i++){
+                categorData.push(echarts.format.formatTime('yyyy-MM-dd\nhh:mm:ss', time));
+                valueData.push(next(i).toFixed(2));
+                time+=1000;
+            }
+
+            return {
+                categorData: categorData,
+                valueData: valueData
+            }
+        }
+
+        // 设置数组的大小
+        var dataCount = 5e5;
+        var data=generateDate(dataCount);
+
+        var option = {
+            title:{
+                text: echarts.format.addCommas(dataCount) + 'Data',
+            left: 10
+            },
+            toolbox:{
+                feature:{
+                    dataZoom:{
+                        yAxis: false,
+                    },
+                    saveAsImage:{
+                        pixelRatio: 2
+                    }
+                }
+            },
+            tooltip:{
+                trigger:'axis',
+                axisPointer:{
+                    type: 'shadow'
+                }
+            },
+            grid:{
+                bottom: 90
+            },
+            dataZoom:[
+                {
+                    type: 'inside',
+
+                },{
+                    type: 'slider'
+                }
+            ],
+            xAxis:{
+                data: data.categorData,
+                slient: false,
+                spiltLine: {
+                    show:false,
+                },
+                splitArea:{
+                    show: false
+                }
+            },
+            yAxis: {
+                splitArea:{
+                    show: false
+                },
+
+            },
+            series:[{
+                type:'bar',
+                data: data.valueData,
+                large: true
+            }]
+            
+        }
+
+   
+        mychart.setOption(option);
+
+
+
+    </Script>
+
+</body>

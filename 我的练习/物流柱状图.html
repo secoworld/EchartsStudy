@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>物流柱状图</title>
+
+    <!-- 基本的JavaScript库 -->
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <div id="main" style="height: 400px; width:600px; margin: auto;"></div>    
+    <script>
+        var mychart  = echarts.init(document.getElementById("main"));
+
+        // 设置柱状图的颜色
+        var myColor = ['#eb2100', '#eb3600', '#d0570e', '#d0a00e', '#34da62', '#00e9db', '#00c0e9', '#0096f3', '#33CCFF', '#33FFCC'];
+        var option = {
+            backgroundColor: "black",
+            grid:{
+                left: '10%',
+                right: '10%',
+                top: '10%',
+                bottom: '5%',
+                containLabel: true,
+            },
+            // 设置X坐标轴
+            xAxis:{
+                show: false,
+            },
+            yAxis:[
+                {
+                    axisTick: 'none',
+                    axisLine: 'none',
+                    axisLabel:{
+                        textStyle:{
+                            color: 'white', 
+                        }
+                    },
+                    offset: 20,
+                    data:['上海','北京', '深圳', '济南', '河南', '南京', '福建', '天津', '重庆', '成都']
+                },
+                {
+                    axisTick: 'none',
+                    axisLine: 'none',
+                    axisLabel:{
+                        textStyle:{
+                            color: 'white', 
+                        }
+                    },
+                    data:['10','9', '8', '7', '6', '5', '4', '3', '2', '1']
+                }
+            ],
+            series:[
+                {
+                    name: "成绩",
+                    type: "bar",
+                    yAxisIndex: 0,
+                    data:[80, 78, 70, 65, 56, 51, 49, 44, 32, 20].reverse(),
+                    barWidth: 12,
+                   
+                    itemStyle:{
+                        normal:{
+                            color: function(params){
+                                var num = myColor.length;
+                                // console.log(params);
+                                return myColor[params.value % num];
+                            }
+                        }
+                    }
+
+                },
+                {
+                    name: "外框",
+                    type: "bar",
+                    yAxisIndex: 1,
+                    data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+                    itemStyle:{
+                        normal:{
+                            color: function(params){
+                                var num = myColor.length;
+                                return myColor[params.dataIndex % num];
+                            }
+                        }
+                    },
+                    barWidth: 20,
+                    z: 0,
+                },
+                {
+                    name: "内边",
+                    type: "bar",
+                    yAxisIndex: 0,
+                    data: [99, 99, 99, 99, 99, 99, 99, 99, 99, 99],
+                    itemStyle:{
+                        normal:{
+                            color: "black"
+                            
+                        }
+                    },
+                    barGap: "-98%",
+                    barWidth: 18,
+                    z: 1,
+                    barCategoryGap: "40%",
+                },
+                {
+                    name:"圆点",
+                    type: "scatter",
+                    yAxisIndex: 0,
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    symbolSize: 32,
+                    itemStyle:{
+                        normal:{
+                            color: function(parmas){
+                                var num = myColor.length;
+                                return myColor[parmas.dataIndex % num];
+                            },
+                            opacity:1,
+                        }
+                    },
+                    z: 2,
+
+                }
+            ]
+        }
+
+        mychart.setOption(option)
+    </script>
+</body>
+</html>

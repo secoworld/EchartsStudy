@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>旭日图</title>
+
+    <!-- <script src="../js/echarts.min.js"></script> -->
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:400px; width: 600px;"></div>
+    <script>
+        // 旭日图的简单制作
+        var mychart = echarts.init(document.getElementById("main"));
+
+
+        // 旭日图的样式有series.data.itemStyle: 为每个扇区设置颜色
+        // series.level.itemStyle: 设置每一层的颜色样式
+        // series.itemStyle: 设置整体的样式
+        var option = {
+            series: [{
+                type: 'sunburst',
+                itemStyle: {
+                        color: 'green'
+                    },
+
+                data: [
+                    {
+                        name: 'A',
+                        value: 9,
+                        children: [
+                            {
+                                name: 'a1',
+                                value: 4,
+                                itemStyle: {
+                                    color: 'red'
+                                }
+                            },
+                            {
+                                name: 'a2',
+                                value: 2
+                            }
+                        ]
+                    },
+                    {
+                        name: 'B',
+                        itemStyle: {
+                            color: 'blue'
+                        },
+                        children: [
+                            {
+                                name: 'b1',
+                                value: 8
+                            },
+                            {
+                                name: 'b2',
+                                value: 4
+                            }
+                        ]
+                    },
+                    {
+                        name: 'C',
+                        value: 10,
+                        children: [
+                            {
+                                name: 'c1',
+                                value: 3
+                            },
+                            {
+                                name: 'c2',
+                                vlaue: 6
+                            }
+                        ]
+                    }, 
+                ]
+            }]
+        }
+
+        mychart.setOption(option)
+
+    </script>
+</body>
+
+</html>

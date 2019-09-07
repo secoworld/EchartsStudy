@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>旭日图</title>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:600px; width: 600px;"></div>
+
+    <Script>
+        var mychart = echarts.init(document.getElementById("main"));
+
+        var dataAxis = ['点', '击', '柱', '子', '或', '者', '两', '指', '在', '触', '屏', '上', '滑', '动', '能', '够', '自', '动', '缩', '放'];
+        var data = [220, 182, 191, 234, 290, 330, 310, 123, 442, 321, 90, 149, 210, 122, 133, 334, 198, 123, 125, 220];
+        var yMax = 500;
+
+        var dataShadow = [];
+
+        // 设置背景长度
+        for (var i = 0; i < data.length; i++) {
+            dataShadow.push(yMax);
+        }
+
+        var option = {
+            title: {
+                text: "特性实例， 渐变色， 阴影 点击缩放",
+                subtext: "jianbain"
+            },
+            grid:{
+                top: '100',
+            },
+            xAxis: {
+                data: dataAxis,
+                axisLabel: {
+                    // 设置标题为内侧
+                    inside: true,
+                    textStyle: {
+                        // 白色
+                        color: '#fff'
+                    }
+                },
+                axisTick: {
+                    show: false,
+                },
+                axisLine: {
+                    show: false,
+                },
+                // z为显示的层数
+                z: 10
+            },
+            yAxis: {
+                axisLine: {
+                    show: false,
+                },
+                // 刻度线
+                axisTick: {
+                    show: false,
+                },
+                axisLabel: {
+                    // 设置标签字体
+                    textStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            // 设置数据区域缩放
+            dataZoom: [
+                {
+                    type: 'inside',
+                }
+            ],
+            series: [
+                {
+                    // 设置背景
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(0,0, 0, 0.05)'
+                        }
+                    },
+                    // 设置柱子之间的距离，如果设置重叠则为-100%
+                    barGap: '-100%',
+                    // 设置背景的柱形
+                    data: dataShadow,
+                    animation: false,
+
+                },
+                {
+                    // 显示的真正的数据
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            // 设置正常的颜色，显示渐变色
+                            color: new echarts.graphic.LinearGradient(
+                                0, 0, 0, 1,
+                                [
+                                    { offset: 0, color: '#83bff6' },
+                                    { offset: 0.5, color: '#188df0' },
+                                    { offset: 1, color: '#188df0' }
+                                ])
+                        },
+                        emphasis: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#2378f7' },
+                                { offset: 0.7, color: '#2378f7' },
+                                { offset: 1, color: '#83bff6' }
+                            ])
+                        }
+                    },
+                    data:data,
+                }
+            ]
+
+        }
+
+        mychart.setOption(option);
+
+        // 设置鼠标点击事件
+        var zoomSize = 6;
+        mychart.on('click', function(parmas){
+            console.log(dataAxis[Math.max(parmas.dataIndex - zoomSize/2, 0)]);
+            mychart.dispatchAction({
+                type: 'dataZoom',
+                startValue: dataAxis[Math.max(parmas.dataIndex - zoomSize/2, 0)],
+                endValue: dataAxis[Math.max(parmas.dataIndex + zoomSize/2, data.length -1)],
+            })
+        })
+
+    </Script>
+
+</body>
